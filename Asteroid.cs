@@ -6,15 +6,18 @@ using UnityEngine.SocialPlatforms.Impl;
 public class Asteroid : MonoBehaviour {
     // inspector settings
     public Rigidbody rigidBody; 
+     public static Asteroid instance;
     public GameObject debris;
     public GameObject asteroid;
     public GameObject ship;
+
 
     public float cooldown=2f;
     public float lastHit;
 
     // Use this for initialization
     void Start () {
+    
         transform.localScale = new Vector3(Random.Range(0.08f, 0.12f), Random.Range(0.08f, 0.12f), Random.Range(0.08f, 0.12f));
         rigidBody.mass = transform.localScale.x * transform.localScale.y * transform.localScale.z;
 
@@ -76,11 +79,16 @@ public class Asteroid : MonoBehaviour {
                 Destroy(this.gameObject);
                 splitLargeAsteroid();// calling method to split bigger asteroids
             }
-            else if(rigidBody.mass <0.00003f){
-                Destroy(this.gameObject);
-            }
+            // else if(rigidBody.mass <0.00004f){
+            //     Destroy(this.gameObject);
+            // }
              else{
                Debug.Log("Too small");
+                if (GameManager.asteroids.Contains(this.gameObject)) {
+                GameManager.asteroids.Remove(this.gameObject);
+            }
+               Debug.Log(GameManager.asteroids.Count);
+               Destroy(this.gameObject);
                createDebris(collisionPoint);// calling method to spawn debris
             }
         }

@@ -1,6 +1,8 @@
 //using System;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +16,7 @@ public class GameManager : MonoBehaviour {
     public static int currentGameLevel;
     public static Vector3 screenBottomLeft, screenTopRight; 
     public static float screenWidth, screenHeight;
+    public static List<GameObject> asteroids;
     public GameObject ship;
 
     //public List<Asteroid> asteroids;
@@ -29,13 +32,13 @@ public class GameManager : MonoBehaviour {
     public bool playing=false;
 
     void Start() {
-    
+      StartNewGame();
     }
     void Awake() {
     if (instance == null) {
         instance = this;
         //StartNewGame();
-        DontDestroyOnLoad(gameObject);
+       // DontDestroyOnLoad(gameObject);
     } else {
         Destroy(gameObject); // Ensures only one instance of GameManager exists
     }
@@ -52,11 +55,17 @@ public class GameManager : MonoBehaviour {
       }
       displayLives.text="Lives: "+GameManager.lives.ToString();
    }
+    void Update() {
+      if(!asteroids.Any()){
+         StartNextLevel();
+      }
+   }
 
     
     public void StartNewGame(){
         Debug.Log("Starting game");
         instance = this;
+        asteroids= new List<GameObject>();
         Camera.main.transform.position = new Vector3(0f, 30f, 0f); 
         Camera.main.transform.LookAt(Vector3.zero, new Vector3(0f, 0f, 1f)); 
         currentGameLevel = 0;
@@ -90,6 +99,7 @@ public class GameManager : MonoBehaviour {
         // create some asteroids near the edges of the screen
         for (int i = 0; i < currentGameLevel * 2 + 3; i++) {
             GameObject go = Instantiate(instance.asteroidPrefab) as GameObject; 
+            asteroids.Add(go);
             float x, z;
             if (Random.Range(0f, 1f) < 0.5f)
                 x = screenBottomLeft.x + Random.Range(0f, 0.15f) * screenWidth; 
@@ -102,6 +112,7 @@ public class GameManager : MonoBehaviour {
 
             go.transform.position = new Vector3(x, 0f, z);
         }
+       Debug.Log(asteroids.Count);
     }
 
     public void CreatePlayerShip() {
