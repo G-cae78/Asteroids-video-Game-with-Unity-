@@ -35,14 +35,12 @@ public class GameManager : MonoBehaviour {
       //StartNewGame();
     }
     void Awake() {
-    if (instance == null) {
-        instance = this;
-        //StartNewGame();
-       // DontDestroyOnLoad(gameObject);
-    } else {
-        Destroy(gameObject); // Ensures only one instance of GameManager exists
-    }
-   }
+    DontDestroyOnLoad(gameObject);
+    DontDestroyOnLoad(displayScore);
+    DontDestroyOnLoad(displayLives);
+    DontDestroyOnLoad(displayHighScore);
+}
+
 
    void FixedUpdate(){
       if(score>highScore)
@@ -56,7 +54,7 @@ public class GameManager : MonoBehaviour {
       displayLives.text="Lives: "+GameManager.lives.ToString();
    }
     void Update() {
-        Debug.Log(asteroids.Count);
+        //Debug.Log(asteroids.Count);
       if(!asteroids.Any()){
          StartNextLevel();
       }
@@ -94,9 +92,9 @@ public class GameManager : MonoBehaviour {
             SceneManager.LoadScene("ScoreBoard");
             StartNewGame();
         }
-        else{
-            inMenu=true;
-        }
+        // else{
+        //     inMenu=true;
+        // }
         //LoadGame();
     }
 
