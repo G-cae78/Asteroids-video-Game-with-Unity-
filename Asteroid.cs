@@ -76,17 +76,17 @@ public class Asteroid : MonoBehaviour {
             Destroy(other.gameObject);//destoy bullet after collision
             if (rigidBody.mass > 0.0005f) {
                 // Destroy current asteroid and create two smaller asteroids
+                if (GameManager.asteroids.Contains(this.gameObject)){
+                GameManager.asteroids.Remove(this.gameObject);
+                }
                 Destroy(this.gameObject);
                 splitLargeAsteroid();// calling method to split bigger asteroids
             }
-            // else if(rigidBody.mass <0.00004f){
-            //     Destroy(this.gameObject);
-            // }
              else{
                Debug.Log("Too small");
-                if (GameManager.asteroids.Contains(this.gameObject)) {
+                if (GameManager.asteroids.Contains(this.gameObject)){
                 GameManager.asteroids.Remove(this.gameObject);
-            }
+                }
                Debug.Log(GameManager.asteroids.Count);
                Destroy(this.gameObject);
                createDebris(collisionPoint);// calling method to spawn debris
@@ -135,6 +135,11 @@ public class Asteroid : MonoBehaviour {
        // Start the offScreen method for the smaller asteroids to handle wrapping
        smallAsteroid1.GetComponent<Asteroid>().InvokeRepeating("offScreen", 0.2f, 0.2f);
        smallAsteroid2.GetComponent<Asteroid>().InvokeRepeating("offScreen", 0.2f, 0.2f);
+
+       GameManager.asteroids.Add(smallAsteroid1);
+       GameManager.asteroids.Add(smallAsteroid2);
+
+       Debug.Log(GameManager.asteroids.Count);
 
        Debug.Log(smallAsteroid1.GetComponent<Rigidbody>().mass);
        Debug.Log(smallAsteroid2.GetComponent<Rigidbody>().mass);

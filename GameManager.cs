@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     public bool playing=false;
 
     void Start() {
-      StartNewGame();
+      //StartNewGame();
     }
     void Awake() {
     if (instance == null) {
@@ -56,8 +56,16 @@ public class GameManager : MonoBehaviour {
       displayLives.text="Lives: "+GameManager.lives.ToString();
    }
     void Update() {
+        Debug.Log(asteroids.Count);
       if(!asteroids.Any()){
          StartNextLevel();
+      }
+      //Destroying asteroids left over before new game starts or game ends
+      if(inMenu){
+        foreach(GameObject asteroid in asteroids){
+            Destroy(asteroid);
+        }
+        asteroids.Clear();
       }
    }
 
@@ -97,7 +105,7 @@ public class GameManager : MonoBehaviour {
         currentGameLevel++;
 
         // create some asteroids near the edges of the screen
-        for (int i = 0; i < currentGameLevel * 2 + 3; i++) {
+        for (int i = 0; i < currentGameLevel * 2 + 1; i++) {
             GameObject go = Instantiate(instance.asteroidPrefab) as GameObject; 
             asteroids.Add(go);
             float x, z;
