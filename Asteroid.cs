@@ -77,13 +77,14 @@ public class Asteroid : MonoBehaviour {
             if (rigidBody.mass > 0.0005f) {
                 // Destroy current asteroid and create two smaller asteroids
                 if (GameManager.asteroids.Contains(this.gameObject)){
-                GameManager.asteroids.Remove(this.gameObject);
+                GameManager.asteroids.Remove(this.gameObject);//Removing big asteroid from list and the destroying before splitting
                 }
                 Destroy(this.gameObject);
                 splitLargeAsteroid();// calling method to split bigger asteroids
             }
              else{
                Debug.Log("Too small");
+               //Removing asteroid from list and the destroying
                 if (GameManager.asteroids.Contains(this.gameObject)){
                 GameManager.asteroids.Remove(this.gameObject);
                 }

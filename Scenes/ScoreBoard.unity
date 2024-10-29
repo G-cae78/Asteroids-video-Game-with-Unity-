@@ -540,7 +540,7 @@ GameObject:
   - component: {fileID: 1044986706}
   - component: {fileID: 1044986705}
   m_Layer: 0
-  m_Name: Score Board
+  m_Name: ScoreBoard
   m_TagString: Score Board
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

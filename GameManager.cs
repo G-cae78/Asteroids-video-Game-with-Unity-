@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
     public static float screenWidth, screenHeight;
     public static List<GameObject> asteroids;
     public GameObject ship;
+    //public TMP_Text scoreBoard;
 
     //public List<Asteroid> asteroids;
     public TMP_Text displayScore;
@@ -35,28 +36,33 @@ public class GameManager : MonoBehaviour {
       //StartNewGame();
     }
     void Awake() {
+    //Using DontDestroy to prevent game object from being deleted when switching between scenes
     DontDestroyOnLoad(gameObject);
-    DontDestroyOnLoad(displayScore);
-    DontDestroyOnLoad(displayLives);
-    DontDestroyOnLoad(displayHighScore);
+    DontDestroyOnLoad(asteroidPrefab);
+    DontDestroyOnLoad(ship);
+    //DontDestroyOnLoad(scoreBoard);
 }
 
 
    void FixedUpdate(){
-      if(score>highScore)
+
+      if(score>highScore)//updating high score if necessary
       highScore=score;
 
+      //displaying score board text 
       displayScore.text="Score: "+GameManager.score.ToString();
       displayHighScore.text="High Score: "+GameManager.highScore.ToString(); 
+
       if(lives==0){
         SceneManager.LoadScene("Menu",LoadSceneMode.Single);
       }
+      //displaying player lives on score board
       displayLives.text="Lives: "+GameManager.lives.ToString();
    }
     void Update() {
         //Debug.Log(asteroids.Count);
-      if(!asteroids.Any()){
-         StartNextLevel();
+      if(!asteroids.Any()){//Checking if there are still asteroids left to be destroyed
+         StartNextLevel();//starting new level if all asteroids have been destroyed
       }
       //Destroying asteroids left over before new game starts or game ends
       if(inMenu){
@@ -71,11 +77,12 @@ public class GameManager : MonoBehaviour {
     public void StartNewGame(){
         Debug.Log("Starting game");
         instance = this;
-        asteroids= new List<GameObject>();
+        asteroids= new List<GameObject>();//initialising list of asteroid objects
         Camera.main.transform.position = new Vector3(0f, 30f, 0f); 
         Camera.main.transform.LookAt(Vector3.zero, new Vector3(0f, 0f, 1f)); 
         currentGameLevel = 0;
 
+        //Setting camera view point
         screenBottomLeft = Camera.main.ViewportToWorldPoint(new Vector3(0f, 0f, 30f)); 
         screenTopRight = Camera.main.ViewportToWorldPoint(new Vector3(1f, 1f, 30f)); 
         screenWidth = screenTopRight.x - screenBottomLeft.x;
@@ -84,22 +91,31 @@ public class GameManager : MonoBehaviour {
         CreatePlayerShip();// calling method to instntiate spaceship object
         StartNextLevel(); // calling method to start next level
     }
-    public void StartButton(){
-        Debug.Log("Start Button Pressed");
-        this.inMenu=false;
-        this.playing=true;
-         if(playing && !inMenu){
-            SceneManager.LoadScene("ScoreBoard");
-            StartNewGame();
-        }
-        // else{
-        //     inMenu=true;
-        // }
-        //LoadGame();
+    //Function to be called when start button is clicked
+   public void StartButton() {
+    Debug.Log("Start Button Pressed");
+    //changing game state to playing when start button is pressed
+    this.inMenu = false;
+    this.playing = true;
+
+    if (playing && !inMenu) {
+        //Using couroutine to ensure scene is fully loaded before starting game
+        StartCoroutine(LoadScoreBoardScene());
     }
+}
+
+private IEnumerator LoadScoreBoardScene() {
+    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("ScoreBoard");
+    while (!asyncLoad.isDone) {
+        yield return null; // wait for the scene to load
+    }
+    StartNewGame(); // Then start the new game
+}
+
 
 
     public static void StartNextLevel() { 
+         score=0;//resetting current score every new game level
         currentGameLevel++;
 
         // create some asteroids near the edges of the screen
