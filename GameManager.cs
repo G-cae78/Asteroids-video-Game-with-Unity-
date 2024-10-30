@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
     public static int highScore=0;
     public static int lives=3;
     
-
+    //Using bolean to represent game states
     public bool inMenu=true;
     public bool playing=false;
 
@@ -56,7 +56,9 @@ public class GameManager : MonoBehaviour {
       displayHighScore.text="High Score: "+GameManager.highScore.ToString(); 
 
       if(lives==0){
-        SceneManager.LoadScene("Menu",LoadSceneMode.Single);
+        inMenu=true;
+        playing=false;
+        SceneManager.LoadScene("Menu",LoadSceneMode.Single);//Moving back to menu if player has run out of lives
       }
       //displaying player lives on score board
       displayLives.text="Lives: "+GameManager.lives.ToString();
