@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour {
 
     void Start() {
       //StartNewGame();
+      LoadHighScore();
     }
     void Awake() {
     //Using DontDestroy to prevent game object from being deleted when switching between scenes
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour {
 
       if(score>highScore)//updating high score if necessary
       highScore=score;
+      SaveHighScore();
 
       //displaying score board text 
       displayScore.text="Score: "+GameManager.score.ToString();
@@ -141,5 +143,12 @@ private IEnumerator LoadScoreBoardScene() {
         //instatiating spaceShip object
         Vector3 shipPosition = new Vector3(0f, 0f, 0f); // Center of the screen
         Instantiate(ship, shipPosition, Quaternion.Euler(90,0,0)); 
+    }
+    void SaveHighScore(){
+        PlayerPrefs.SetInt("HighScore",highScore);//Using unity PlayerPrefs to store high score between games
+    }
+    void LoadHighScore(){
+        Debug.Log(PlayerPrefs.GetInt("HighScore"));
+        highScore= PlayerPrefs.GetInt("HighScore");// retrieving players highscore from player history
     }
 }

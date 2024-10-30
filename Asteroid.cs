@@ -70,11 +70,12 @@ public class Asteroid : MonoBehaviour {
         // }
 
         if (other.gameObject.CompareTag("bullet")) {
-            GameManager.score+=250;
+           
             Debug.Log("Shot by bullet");
             Debug.Log(rigidBody.mass);
             Destroy(other.gameObject);//destoy bullet after collision
             if (rigidBody.mass > 0.0005f) {
+                 GameManager.score+=250;
                 // Destroy current asteroid and create two smaller asteroids
                 if (GameManager.asteroids.Contains(this.gameObject)){
                 GameManager.asteroids.Remove(this.gameObject);//Removing big asteroid from list and the destroying before splitting
@@ -84,6 +85,7 @@ public class Asteroid : MonoBehaviour {
             }
              else{
                Debug.Log("Too small");
+                GameManager.score+=100;
                //Removing asteroid from list and the destroying
                 if (GameManager.asteroids.Contains(this.gameObject)){
                 GameManager.asteroids.Remove(this.gameObject);
