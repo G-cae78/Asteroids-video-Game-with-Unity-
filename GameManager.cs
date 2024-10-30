@@ -117,7 +117,7 @@ private IEnumerator LoadScoreBoardScene() {
 
 
     public static void StartNextLevel() { 
-         score=0;//resetting current score every new game level
+        // score=0;//resetting current score every new game level
         currentGameLevel++;
 
         // create some asteroids near the edges of the screen

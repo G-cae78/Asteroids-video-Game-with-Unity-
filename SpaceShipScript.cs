@@ -41,7 +41,7 @@ public class SpaceShipScript : MonoBehaviour
             LastFired=Time.time;//updating time of when last bullet was fired
             Vector3 bulletPos = transform.position + transform.up * 2f;
             GameObject bull = Instantiate(bullet, bulletPos, transform.rotation);//instantiating and setting bullet position
-            bull.GetComponent<Rigidbody>().linearVelocity=ship.transform.up*10f;//making bullet move forward in the direction the ship is facing
+            bull.GetComponent<Rigidbody>().linearVelocity=ship.transform.up*20f;//making bullet move forward in the direction the ship is facing
             Debug.Log(bull.GetComponent<Rigidbody>().linearVelocity);
           //  bull.transform.rotation=ship.transform.rotation;
            
